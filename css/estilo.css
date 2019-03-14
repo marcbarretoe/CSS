@@ -4,7 +4,7 @@ body{
     font-family: 'Lato', sans-serif;
     
 }
-
+/* ------------------------ Contenedor de elementos  ------------------------ */
 .container{
     padding: 15px;
     margin-left: 40%;
@@ -12,7 +12,7 @@ body{
     width: 25%;
     text-align: left;
 }
-
+/* ------------------------ Titulos y Subtitulos ------------------------ */
 h1,h2{
    color:#2bcae4;
 }
@@ -24,6 +24,13 @@ h2{
     font-size:1.2em;
 }
 
+/* ------------------------ Listas  ------------------------ */
+
+ul {
+    margin: 0px;
+    padding: 0px;
+}
+
 li{
     list-style:none;
     margin:0;
@@ -31,10 +38,7 @@ li{
     border-collapse: collapse;
 }
 
-ul {
-    margin: 0px;
-    padding: 0px;
-}
+/* ------------------------ Tareas Completadas  ------------------------ */
 
 #completed-tasks li{
     text-decoration:line-through;
