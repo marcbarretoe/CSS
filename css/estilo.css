@@ -44,6 +44,8 @@ li{
     text-decoration:line-through;
 }
 
+/* ------------------------ Cuadro de Texto  ------------------------ */
+
 #new-task{
     width: 100%;
     height: 25px;
