@@ -256,6 +256,8 @@
      */
     const removeTaskFromList = (id) => {
         // TODO ITEM 4: remover del DOM HTML el elemento con id `task-${id}`
+        let elem = document.getElementById(`task-${id}`);
+                elem.parentNode.removeChild(elem);
     };
 
     /**
@@ -270,5 +272,8 @@
         //   - Como parámetro `callbackError` enviar una función que llame al método `showError` enviando
         //     un mensaje de error
         //   - La llamada debe ser asíncrona.
+        Ajax.sendDeleteRequest(API_URL +'/' + id, null, MediaFormat.JSON, function(){
+         removeTaskFromList(id);
+        }, showError, true) 
     };
 })();
