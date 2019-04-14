@@ -37,7 +37,7 @@
 
        // Ajax.sendGetRequest(API_URL, null, MediaFormat.JSON, loadTasks, showError, true);
 
-        $.get(API_URL,null,loadTasks,MediaFormat.JSON)
+        $.get(API_URL,null,loadTasks,MediaFormat.JSON);
 
     };
 
@@ -91,11 +91,15 @@
         //  - La llamada debe ser asíncrona.
         //  - No te olvides de envíar el parámetro `task` para que se cree la tarea.
 
-        Ajax.sendPostRequest(API_URL, task, JSON,  function(){
-        	addTaskToList(task);
-                document.getElementById("new-task").value = '';
-        }, showError, true, MediaFormat.JSON);
-
+       // Ajax.sendPostRequest(API_URL, task, JSON,  function(){
+       // 	addTaskToList(task);
+       //         document.getElementById("new-task").value = '';
+       // }, showError, true, MediaFormat.JSON);
+        
+        $("new-task").post(API_URL,task,function(){
+        addTaskToList(task);
+        document.getElementById("new-task").value = '';
+        },MediaFormat.JSON);
 
         return false;
     };
@@ -211,6 +215,14 @@
             //    error
             //  - La llamada debe ser asíncrona.
             //  - No te olvides de envíar el parámetro para que se cree la tarea.
+
+                Ajax.sendPutRequest(API_URL + '/' + task.id, task, MediaFormat.JSON, function(){
+                 revertHTMLChangeOnEdit(currentTask);
+}, showError, true, MediaFormat.JSON);
+
+
+
+
         };
 
         let buttonCancel = document.createElement('button');
