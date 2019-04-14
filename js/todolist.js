@@ -5,7 +5,7 @@
  * @since 04/03/19.
  * @version 1.0
  */
-(() => {
+(($) => {
     'use strict';
 
     const API_URL = 'https://task-backend-fpuna.herokuapp.com/tasks';
@@ -276,4 +276,4 @@
          removeTaskFromList(id);
         }, showError, true) 
     };
-})();
+})(jQuery);
