@@ -37,7 +37,7 @@
 
        // Ajax.sendGetRequest(API_URL, null, MediaFormat.JSON, loadTasks, showError, true);
 
-        $.get(API_URL,loadTasks);
+        $.get(API_URL,loadTasks).fail(function(a,b,c){showError(b,c);});
 
     };
 
@@ -50,6 +50,16 @@
         // TODO ITEM 6 recuperar el elemento HTML con la clase `error-bar` y modificar el HTML interno de
         // manera a mostrar el mensaje de error.
         // El mensaje de error debe desaparacer luego de 3 segundos.
+        
+        let txt = $("<p id='e'></p>").text(text);
+        //let elem = $('#mensaje_error').innerHTML = "<p>Hola</p>";
+       
+        
+        $("#mensaje_error").css({"background-color":"red","position":"fixed","width":"100%"});
+        $("#mensaje_error").append(txt);
+	setTimeout(()=>{
+        $('#e').remove();
+        },2500);
     };
 
 
@@ -93,17 +103,23 @@
         //  - La llamada debe ser asíncrona.
         //  - No te olvides de envíar el parámetro `task` para que se cree la tarea.
 
+
+        // METODO AJAX
+
        // Ajax.sendPostRequest(API_URL, task, JSON,  function(){
        // 	addTaskToList(task);
        //         document.getElementById("new-task").value = '';
        // }, showError, true, MediaFormat.JSON);
         
+        // PRUEBA
         /*$("new-task").post(API_URL,JSON.stringify(task),
         function(){
         addTaskToList(task);
         document.getElementById("new-task").value = '';
         },MediaFormat.JSON);*/
         
+
+        // METODO JQUERY
         $.ajaxSetup({headers:{"Content-Type":"application/json", "Accept":"application/json"}});
         $.post(API_URL,
          JSON.stringify(task),
@@ -348,6 +364,7 @@
 
 
         // METODO JQUERY
+	setTimeout(()=>{
                   $.ajax({url: API_URL + '/' + id,
                   success: function(){
                   removeTaskFromList(id);},
@@ -356,6 +373,7 @@
                   type: "DELETE"
 
             });
+},0);
         
  
     };
