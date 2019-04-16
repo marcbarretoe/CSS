@@ -37,7 +37,7 @@
 
        // Ajax.sendGetRequest(API_URL, null, MediaFormat.JSON, loadTasks, showError, true);
 
-        $.get(API_URL,null,loadTasks,MediaFormat.JSON);
+        $.get(API_URL,loadTasks);
 
     };
 
@@ -60,7 +60,9 @@
      */
     const loadTasks = (array) => {
 
-        let tasks = JSON.parse(array);
+        //let tasks = JSON.parse(array);
+         // Para JQUERY
+        let tasks = array;
         for (let i in tasks) {
             if (tasks.hasOwnProperty(i)) {
                 addTaskToList(tasks[i]);
@@ -96,10 +98,18 @@
        //         document.getElementById("new-task").value = '';
        // }, showError, true, MediaFormat.JSON);
         
-        $("new-task").post(API_URL,task,function(){
+        /*$("new-task").post(API_URL,JSON.stringify(task),
+        function(){
         addTaskToList(task);
         document.getElementById("new-task").value = '';
-        },MediaFormat.JSON);
+        },MediaFormat.JSON);*/
+        
+        $.ajaxSetup({headers:{"Content-Type":"application/json", "Accept":"application/json"}});
+        $.post(API_URL,
+         JSON.stringify(task),
+         function(data,status){
+             addTaskToList(task);
+             document.getElementById("new-task").value = '';})
 
         return false;
     };
@@ -126,6 +136,9 @@
             // - Una forma de hacerlo es remover directamente el archivo con el id `task-${task.id}` del DOM HTML
             // y luego llamar a la función `addTaskToList` que re-creara la tarea con el nuevo estado en el lugar correcto.
             // - No te olvides de llamar al API (método PUT) para modificar el estado de la tarea en el servidor.
+
+          // METODO AJAX
+
             if(e.target.checked) {
                 let elem = document.getElementById(`task-${task.id}`);
                 elem.parentNode.removeChild(elem);
@@ -133,9 +146,27 @@
 		task.status = 'TERMINADO';
                 addTaskToList(task);
 
-                Ajax.sendPutRequest(API_URL + '/' + task.id, task, MediaFormat.JSON, function(){}, showError, true, MediaFormat.JSON);
+                /*Ajax.sendPutRequest(API_URL + '/' + task.id, task, MediaFormat.JSON, function(){}, showError, true, MediaFormat.JSON);*/
+
+          // METODO JQUERY
+                  $.ajax({url: API_URL + '/' + task.id,
+                  dataType: "json",
+                  headers:{"Content-Type":"application/json", "Accept":"application/json"},
+                  data:JSON.stringify(task),
+                  success: function(){
+                  revertHTMLChangeOnEdit(task);},
+                  error: showError,
+                  async: true,
+                  type: "PUT"
+
+            });
+
 
             }
+
+           
+
+           
 
         };
     };
@@ -216,11 +247,24 @@
             //  - La llamada debe ser asíncrona.
             //  - No te olvides de envíar el parámetro para que se cree la tarea.
 
-                Ajax.sendPutRequest(API_URL + '/' + task.id, task, MediaFormat.JSON, function(){
+            // METODO AJAX
+           /* Ajax.sendPutRequest(API_URL + '/' + task.id, task, MediaFormat.JSON, function(){
                  revertHTMLChangeOnEdit(currentTask);
-}, showError, true, MediaFormat.JSON);
+}, showError, true, MediaFormat.JSON);*/
 
+            // METODO JQUERY
 
+           $.ajax({url: API_URL + '/' + currentTask.id,
+                  dataType: "json",
+                  headers:{"Content-Type":"application/json", "Accept":"application/json"},
+                  data:JSON.stringify(currentTask),
+                  success: function(){
+                  revertHTMLChangeOnEdit(currentTask);},
+                  error: showError,
+                  async: true,
+                  type: "PUT"
+
+            });
 
 
         };
@@ -245,7 +289,10 @@
      * @param currentTask the string coming from the API
      */
     const revertHTMLChangeOnEdit = (currentTask) => {
-        let task = JSON.parse(currentTask);
+       // Para AJAX
+       // let task = JSON.parse(currentTask);
+       // Para JQUERY
+       let task = currentTask;
 
         let currentDOMTask = document.getElementById(`task-${task.id}`);
         currentDOMTask.querySelector('input[type=text]').remove();
@@ -270,8 +317,15 @@
      */
     const removeTaskFromList = (id) => {
         // TODO ITEM 4: remover del DOM HTML el elemento con id `task-${id}`
-        let elem = document.getElementById(`task-${id}`);
-                elem.parentNode.removeChild(elem);
+        
+      // PARA AJAX
+         //let elem = document.getElementById(`task-${id}`);
+          // elem.parentNode.removeChild(elem);
+
+       // PARA JQUERY
+        let elem = $(`#task-${id}`);
+            elem.remove();
+     
     };
 
     /**
@@ -286,8 +340,23 @@
         //   - Como parámetro `callbackError` enviar una función que llame al método `showError` enviando
         //     un mensaje de error
         //   - La llamada debe ser asíncrona.
-        Ajax.sendDeleteRequest(API_URL +'/' + id, null, MediaFormat.JSON, function(){
+
+        // METODO AJAX
+       /* Ajax.sendDeleteRequest(API_URL +'/' + id, null, MediaFormat.JSON, function(){
          removeTaskFromList(id);
-        }, showError, true) 
+        }, showError, true);*/
+
+
+        // METODO JQUERY
+                  $.ajax({url: API_URL + '/' + id,
+                  success: function(){
+                  removeTaskFromList(id);},
+                  error: showError,
+                  async: true,
+                  type: "DELETE"
+
+            });
+        
+ 
     };
 })(jQuery);
